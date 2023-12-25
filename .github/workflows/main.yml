@@ -16,5 +16,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: hello.mp3
-          path: hello.mp3
+          name: hello.aiff
+          path: hello.aiff
