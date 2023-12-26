@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<head>
+    <title>Планирование</title>
+    <style>
+        #progressBar {
+            width: 0%;
+            background-color: green;
+            height: 30px;
+            line-height: 30px;
+            color: white;
+            text-align: center;
+        }
+
+        #container {
+            width: 100%;
+            background-color: grey;
+            height: 30px;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        div {
+            /*border: 1px solid red;*/
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+
+
+<div id="container" style="text-align: center; position: relative;">
+    <div id="progressBar" style="position:absolute; top: 0px; text-align: center; height: 30px;"></div>
+    <div  onclick="start()" style="position:absolute; top: 0px; text-align: center; width: 100% ; height: 30px; margin-top:5px" id="progressBarNum">start</div>
+</div>
+
+
+<iframe id="iFrame"
+        src="https://docs.google.com/presentation/d/e/2PACX-1vSSzBQLOFkm_yPzI7Ln5WGNRFT3ay-vE_1knoIB0GvVUW4maCFdaYGgwSsXtalajvIwm25U2peKrkE3/embed"
+        frameborder="0" style='width:100%; height:calc(100% - 34px)'
+        allowfullscreen="true"
+        mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+<script>
+
+  const slidesUrl = 'https://docs.google.com/presentation/d/e/2PACX-1vSSzBQLOFkm_yPzI7Ln5WGNRFT3ay-vE_1knoIB0GvVUW4maCFdaYGgwSsXtalajvIwm25U2peKrkE3/embed'
+  const slides = [
+    'id.g2a413b6389b_0_0',
+    'id.g2a413b6389b_0_5',
+    'id.p',
+    'id.g25fab2015f2_0_1',
+    'id.g25fab2015f2_0_9',
+    'id.g25fab2015f2_0_13',
+    'id.g25fab2015f2_0_24',
+    'id.g25fab2015f2_0_29',
+  ]
+  const practice = [
+    ["7", 'id.g2a8566cf4a1_1_0', 5*60],
+    ["8", 'id.g2a8566cf4a1_1_6', 2*60 + 18],
+    ["9", 'id.g2a8566cf4a1_1_12', 5*60],
+    ["10", 'id.g2a8566cf4a1_1_16', 5*60],
+    ["11", 'id.g2a8566cf4a1_1_20', 5*60],
+    ["12", 'id.g2a8b33c75b6_0_1', 5*60],
+    ["13", 'id.g2a8566cf4a1_1_20', 5*60],
+  ]
+
+  const progressBar = document.getElementById("progressBar");
+  const progressBarNum = document.getElementById("progressBarNum");
+  const step = 1;
+
+  const iFrame = document.getElementById('iFrame')
+
+  function setSlide(slide, slideID) {
+    if (slideID === undefined) {
+      slideID = slides[slide]
+    }
+    iFrame.src = slidesUrl + '?slide=' + slideID
+    return new Promise(resolve => {resolve()})
+  }
+
+  async function asyncSleep(time) {
+    return new Promise(resolve => {
+      let current = 0.0;
+      const interval = setInterval(() => {
+        current = current + step
+        const progress = current / time;
+        if (progress > 1) {
+          clearInterval(interval)
+          return
+        }
+        progressBarNum.innerHTML = Math.ceil(progress * 100) + "%"
+        progressBar.style.width = (progress * 100) + "%"
+      }, step * 1000);
+      setTimeout(() => {
+        resolve();
+      }, time * 1000)
+    });
+  }
+
+  min = 60;
+
+  async function start() {
+
+    await Promise.all([
+      setSlide(1),
+      asyncSleep(1.5*min),
+      (new Audio('1.mp3')).play(),
+      (new Audio('1.5.mp3')).play(),
+    ])
+
+    await Promise.all([
+      setSlide(2),
+      (new Audio('2.mp3')).play(),
+      await asyncSleep(5 * min)
+    ])
+
+    await Promise.all([
+      setSlide(3),
+      (new Audio('3.mp3')).play(),
+      await asyncSleep(5 * min)
+    ])
+
+
+    await Promise.all([
+      setSlide(4),
+      (new Audio('4.mp3')).play(),
+      await asyncSleep(5 * min)
+    ])
+
+    const [number, id, time] = practice[
+      Math.floor(Math.random() * practice.length)];
+    await Promise.all([
+      setSlide(undefined, id),
+      (new Audio(`${number}.mp3`)).play(),
+      await asyncSleep(time)
+    ])
+
+    await Promise.all([
+      setSlide(6),
+      (new Audio('5.mp3')).play(),
+      await asyncSleep(5 * min)
+    ])
+
+    await Promise.all([
+      setSlide(7),
+      (new Audio('6.mp3')).play()
+    ])
+
+  }
+
+
+</script>
+</body>
+</html>
