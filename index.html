@@ -61,13 +61,13 @@
     'id.g25fab2015f2_0_29',
   ]
   const practice = [
-    ["7", 'id.g2a8566cf4a1_1_0', 5*60],
-    ["8", 'id.g2a8566cf4a1_1_6', 2*60 + 18],
-    ["9", 'id.g2a8566cf4a1_1_12', 5*60],
-    ["10", 'id.g2a8566cf4a1_1_16', 5*60],
-    ["11", 'id.g2a8566cf4a1_1_20', 5*60],
-    ["12", 'id.g2a8b33c75b6_0_1', 5*60],
-    ["13", 'id.g2a8566cf4a1_1_20', 5*60],
+    ["11", 'id.g2a8566cf4a1_1_0', 5*60],
+    ["12", 'id.g2a8566cf4a1_1_6', 2*60 + 18],
+    ["13", 'id.g2a8566cf4a1_1_12', 5*60],
+    ["14", 'id.g2a8566cf4a1_1_16', 5*60],
+    ["15", 'id.g2a8566cf4a1_1_20', 5*60],
+    ["16", 'id.g2a8b33c75b6_0_1', 5*60],
+    ["17", 'id.g2a8566cf4a1_1_20', 5*60],
   ]
 
   const progressBar = document.getElementById("progressBar");
@@ -104,32 +104,47 @@
   }
 
   min = 60;
+  let voice;
+
+  if (window.location.hash.includes("siri")) {
+      // Если в адресе есть #siri, выполняем какой-то код
+      voice = 'siri'
+  } else {
+      // Если #siri в адресе нет
+      voice = 'max'
+  }
+
+
+  async function say(file){
+      return (new Audio(`${voice}/${file}.mp3`)).play()
+  }
 
   async function start() {
 
+
     await Promise.all([
       setSlide(1),
-      asyncSleep(1.5*min),
-      (new Audio('1.mp3')).play(),
+      asyncSleep(1.5 * min),
+      say(`1.${Math.floor(Math.random() * 3) + 1}`),
       (new Audio('1.5.mp3')).play(),
     ])
 
     await Promise.all([
       setSlide(2),
-      (new Audio('2.mp3')).play(),
+      say('2'),
       await asyncSleep(5 * min)
     ])
 
     await Promise.all([
       setSlide(3),
-      (new Audio('3.mp3')).play(),
+      say('3'),
       await asyncSleep(5 * min)
     ])
 
 
     await Promise.all([
       setSlide(4),
-      (new Audio('4.mp3')).play(),
+        say('4'),
       await asyncSleep(5 * min)
     ])
 
@@ -137,19 +152,19 @@
       Math.floor(Math.random() * practice.length)];
     await Promise.all([
       setSlide(undefined, id),
-      (new Audio(`${number}.mp3`)).play(),
+      say(`${number}`),
       await asyncSleep(time)
     ])
 
     await Promise.all([
       setSlide(6),
-      (new Audio('5.mp3')).play(),
+      say('5'),
       await asyncSleep(5 * min)
     ])
 
     await Promise.all([
       setSlide(7),
-      (new Audio('6.mp3')).play()
+      say(`6.${Math.floor(Math.random() * 2)+1}`)
     ])
 
   }
